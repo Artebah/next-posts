@@ -1,18 +1,23 @@
-import { storePost } from '@/lib/posts';
+import { redirect } from "next/navigation";
+
+import { storePost } from "@/lib/posts";
+import FormSubmit from "@/components/form-submit";
 
 export default function NewPostPage() {
   async function createPost(formData) {
     "use server";
-    const title = formData.get('title');
-    const image = formData.get('image');
-    const content = formData.get('content');
+    const title = formData.get("title");
+    const image = formData.get("image");
+    const content = formData.get("content");
 
-    storePost({
-      imageUrl: '',
+    await storePost({
+      imageUrl: "",
       title,
       content,
-      userId: 1
-    })
+      userId: 1,
+    });
+
+    redirect("/feed");
   }
 
   return (
@@ -25,20 +30,14 @@ export default function NewPostPage() {
         </p>
         <p className="form-control">
           <label htmlFor="image">Image URL</label>
-          <input
-            type="file"
-            accept="image/png, image/jpeg"
-            id="image"
-            name="image"
-          />
+          <input type="file" accept="image/png, image/jpeg" id="image" name="image" />
         </p>
         <p className="form-control">
           <label htmlFor="content">Content</label>
           <textarea id="content" name="content" rows="5" />
         </p>
         <p className="form-actions">
-          <button type="reset">Reset</button>
-          <button>Create Post</button>
+          <FormSubmit />
         </p>
       </form>
     </>
